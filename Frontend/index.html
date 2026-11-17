@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sản phẩm - ASP.NET Core & Axios Client</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Thư viện Axios từ CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div>
+                <h1>Quản lý sản phẩm (CRUD Demo)</h1>
+                <p>ASP.NET Core Web API + Entity Framework Core + Front-end Axios</p>
+            </div>
+            <div class="api-config">
+                <label for="apiUrlInput">API Base URL:</label>
+                <input type="text" id="apiUrlInput" value="http://localhost:5000/api" placeholder="http://localhost:5000/api">
+                <button id="btnUpdateApiUrl" class="btn btn-primary btn-sm">Áp dụng</button>
+            </div>
+        </header>
+
+        <!-- Alert Notification -->
+        <div id="alertBox" class="alert"></div>
+
+        <!-- Main Content Grid -->
+        <div class="grid">
+            <!-- Form Tạo mới sản phẩm (POST) -->
+            <div class="card">
+                <h2 class="card-title">Thêm sản phẩm mới (POST)</h2>
+                <form id="createProductForm">
+                    <div class="form-group">
+                        <label for="createName">Tên sản phẩm *</label>
+                        <input type="text" id="createName" required placeholder="Nhập tên sản phẩm...">
+                    </div>
+                    <div class="form-group">
+                        <label for="createDescription">Mô tả</label>
+                        <textarea id="createDescription" rows="3" placeholder="Nhập mô tả sản phẩm..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="createPrice">Giá bán (VNĐ) *</label>
+                        <input type="number" id="createPrice" required min="0" step="1000" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="createStock">Số lượng tồn kho *</label>
+                        <input type="number" id="createStock" required min="0" placeholder="0">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <span>Thêm mới (POST)</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Danh sách sản phẩm (GET) -->
+            <div class="card">
+                <div class="card-title">
+                    <span>Danh sách sản phẩm (GET)</span>
+                    <button id="btnRefresh" class="btn btn-secondary btn-sm">Làm mới dữ liệu</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Kho</th>
+                                <th>Ngày tạo</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center;">Đang kết nối API...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Console Log Box -->
+        <div class="console-box">
+            <div class="console-box-header">
+                <strong>HTTP Requests Log (Axios Interceptors)</strong>
+                <small>Nhật ký gọi API thời gian thực</small>
+            </div>
+            <div id="consoleOutput" class="console-content">Hệ thống sẵn sàng...</div>
+        </div>
+    </div>
+
+    <!-- Modal cập nhật sản phẩm (PUT) -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal">
+            <h3 style="margin-bottom: 16px;">Cập nhật thông tin sản phẩm (PUT)</h3>
+            <form id="editProductForm">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label for="editName">Tên sản phẩm *</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Mô tả</label>
+                    <textarea id="editDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editPrice">Giá bán (VNĐ) *</label>
+                    <input type="number" id="editPrice" required min="0" step="1000">
+                </div>
+                <div class="form-group">
+                    <label for="editStock">Số lượng tồn kho *</label>
+                    <input type="number" id="editStock" required min="0">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelEdit" class="btn btn-secondary">Hủy</button>
+                    <button type="submit" class="btn btn-success">Lưu thay đổi (PUT)</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- App JavaScript -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
